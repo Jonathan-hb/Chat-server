@@ -1,6 +1,6 @@
 from django.db import models
 
-class persons(models.Model);
+class persons(models.Model):
     class Meta:
         verbose_name = "Person"
         verbose_name_plural = "Persons"
@@ -13,13 +13,33 @@ class persons(models.Model);
     profile_picture = models.ImageField("Profiel Picture", blank=True)
     nickname = models.CharField("Nickname", max_length=20)
 
-class messages(models.Model);
+    created_at = models.DateTimeField(editable=False)
+    updated_at = models.DateTimeField()
+    
+    def save(self, *args, **kwargs):
+        if not self.id:
+            created_at = timezone.now()
+
+        updated_at = timezone.now() 
+
+        return super(persons, self).save(*args, **kwargs)
+
+class messages(models.Model):
     class Meta:
         verbose_name = "Message"
         verbose_name_plural = "Messages"
-        #ordering = ["Jeg ved det ikke"]
+        ordering = ["-created_at"]
 
-    message = models.CharField("Message")
-    viewed = models.DateTimeField("Viewed", blank=True, None=True)
+    message = models.TextField("Message")
+    viewed = models.DateTimeField("Viewed", blank=True, null=True)
+
+    created_at = models.DateTimeField(editable=False)
+    updated_at = models.DateTimeField()
     
+    def save(self, *args, **kwargs):
+        if not self.id:
+            created_at = timezone.now()
 
+        updated_at = timezone.now() 
+
+        return super(messages, self).save(*args, **kwargs)
