@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 
 class persons(models.Model):
     class Meta:
@@ -13,16 +14,18 @@ class persons(models.Model):
     profile_picture = models.ImageField("Profiel Picture", blank=True)
     nickname = models.CharField("Nickname", max_length=20)
 
-    created_at = models.DateTimeField(editable=False)
+    created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
     
     def save(self, *args, **kwargs):
         if not self.id:
-            created_at = timezone.now()
+            created_at = datetime.datetime.now()
 
-        updated_at = timezone.now() 
+        updated_at = datetime.datetime.now()
 
         return super(persons, self).save(*args, **kwargs)
+
+
 
 class messages(models.Model):
     class Meta:
@@ -33,13 +36,37 @@ class messages(models.Model):
     message = models.TextField("Message")
     viewed = models.DateTimeField("Viewed", blank=True, null=True)
 
-    created_at = models.DateTimeField(editable=False)
+    messageFrom = models.ForeignKey("persons", on_delete=models.PROTECT, default=1)
+    messageTo = models.ForeignKey("groups", on_delete=models.PROTECT, default=1)
+
+    created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
     
     def save(self, *args, **kwargs):
         if not self.id:
-            created_at = timezone.now()
+            created_at = datetime.datetime.now()
 
-        updated_at = timezone.now() 
+        updated_at = datetime.datetime.now()
 
         return super(messages, self).save(*args, **kwargs)
+
+class groups(models.Model):
+    class Meta:
+        verbose_name = "Group"
+        verbose_name_plural = "Groups"
+        ordering = ["-created_at"]
+
+    person = models.ManyToManyField("persons")
+
+    group_name = models.CharField("Name", max_length=20)
+
+    created_at = models.DateTimeField()
+    updated_at = models.DateTimeField()
+    
+    def save(self, *args, **kwargs):
+        if not self.id:
+            created_at = datetime.datetime.now()
+
+        updated_at = datetime.datetime.now()
+
+        return super(groups, self).save(*args, **kwargs)
