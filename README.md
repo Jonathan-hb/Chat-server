@@ -48,8 +48,24 @@ python3 manage.py migrate
 Then create a superuser so you can login to the server as admin
 
 ```
-python3 manage.py create super user
+python3 manage.py createsuperuser
 ```
 
 Now fill in the infomation.
 
+After you have created a superuser run the server:
+
+```
+python3 manage.py runserver
+```
+
+If there is no failiure then you can now acsess the site by going to the link: 127.0.0.1:8000/admin
+If you sucsessfully are on the page login with the user you just made
+
+Done, the server is up. 
+
+# connect app to own private server
+
+WARN: THIS IS NOT A FEATURE YET!
+
+You can use your own server to make a private version of the app. If 

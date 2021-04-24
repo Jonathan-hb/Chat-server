@@ -1,5 +1,10 @@
 from django.db import models
 import datetime
+import os
+
+def get_upload_path(instance, filename):
+    return os.path.join(f"profilePics/{instance.nickname}")
+
 
 class persons(models.Model):
     class Meta:
@@ -8,15 +13,18 @@ class persons(models.Model):
         #ordering = ["Jeg ved det ikke"]
 
     full_name = models.CharField("Full name", max_length=20)
+    nickname = models.CharField("Nickname", max_length=20)
     email = models.CharField("Email", max_length=100)
     birthdate = models.DateField("Bithdate")
     description = models.CharField("description", max_length=400, blank=True)
-    profile_picture = models.ImageField("Profiel Picture", blank=True)
-    nickname = models.CharField("Nickname", max_length=20)
+    profile_picture = models.ImageField("Profiel Picture", blank=True, upload_to=get_upload_path)
 
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
     
+    def __str__(self):
+        return f"{self.nickname}"
+
     def save(self, *args, **kwargs):
         if not self.id:
             created_at = datetime.datetime.now()
@@ -42,6 +50,9 @@ class messages(models.Model):
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
     
+    def __str__(self):
+        return f"{self.message}"
+
     def save(self, *args, **kwargs):
         if not self.id:
             created_at = datetime.datetime.now()
@@ -63,6 +74,9 @@ class groups(models.Model):
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
     
+    def __str__(self):
+        return f"{self.group_name}"
+
     def save(self, *args, **kwargs):
         if not self.id:
             created_at = datetime.datetime.now()
