@@ -1,9 +1,10 @@
 from django.db import models
 import datetime
 import os
+import uuid
 
 def get_upload_path(instance, filename):
-    return os.path.join(f"profilePics/{instance.nickname}")
+    return os.path.join(f"profilePics/{instance.id}")
 
 
 class persons(models.Model):
@@ -12,6 +13,7 @@ class persons(models.Model):
         verbose_name_plural = "Persons"
         #ordering = ["Jeg ved det ikke"]
 
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     full_name = models.CharField("Full name", max_length=20)
     nickname = models.CharField("Nickname", max_length=20)
     email = models.CharField("Email", max_length=100)
@@ -41,6 +43,8 @@ class messages(models.Model):
         verbose_name_plural = "Messages"
         ordering = ["-created_at"]
 
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
     message = models.TextField("Message")
     viewed = models.DateTimeField("Viewed", blank=True, null=True)
 
@@ -66,6 +70,8 @@ class groups(models.Model):
         verbose_name = "Group"
         verbose_name_plural = "Groups"
         ordering = ["-created_at"]
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     person = models.ManyToManyField("persons")
 
